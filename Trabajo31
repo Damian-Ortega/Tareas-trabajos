@@ -1,234 +1,215 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-struct Evaluacion
-{
-	char *fecha;
-	float promedio;
-};
-struct nodoEvaluacion
-{
-	struct Evaluacion;
-	struct nodoEvalucacion *sig;
-};
-struct Curso
-{
-	int sigla;
-	char *tipo;
-	char *nombre;
-	int creditos;
-	struct nodoEvaluacion *head;
-	struct Curso *sig;
-};
-struct Alumno
-{
-	char *rut;
-	char *nombre;
-	struct Curso **cursos;
-};
-struct nodoAlumno
-{
-	struct Alumno *alumnos;
-	struct nodoAlumno *sig;
-};
-struct Universidad
-{
-	char *rut;
-	struct Curso *cursos;
-	struct nodoAlumno *headAlum;
-};
-
-#define MAX 10
-
-int main()
-{
-	return 0;
-}
-
-
-int contarCreditosAlumno(struct Universidad *u)
-{
-    int cont=0;
-    struct nodoAlumno *rec;
-    rec=u->headAlum;
-
-    if(rec->alumnos!=NULL)
-    {
-        for(i=0;i<MAX;i++)
-        {
-            if(rec->alumnos->cursos[i]=!NULL)
-            {
-                cont=rec->alumnos->cursos[i]->creditos + cont;
-            }
-        }
-    }
-
-    return cont;
-}
-
-int contarCantidadCreditosTotal(struct Universidad *u)
-{
-    struct nodoAlumno *rec;
-    int suma;
-    rec=u->headAlum;
-
-    while(rec=!NULL)
-    {
-        suma=suma+contarCreditosAlumno(u);
-        rec=rec->sig;
-    }
-
-    return suma;
-}
-
-
-struct Curso *buscarcurso(int sigla, struct Curso *head){
-
-	struct Curso *rec=head;
-	do{
-		if(rec->sigla==sigla);
-		{
-			return rec;
-		}
-		rec=rec->sig;
-	}while(rec!=head);
-	return NULL;
-}
-
-int contarCantidadAlumnos(struct Universidad *u)
-{
-    struct nodoAlumno *rec;
-    int cont=0;
-    rec=u->headAlum;
-
-    while(rec=!NULL)
-    {
-        rec=rec->sig;
-        cont++;
-    }
-
-    return cont;
-}
-
-
-
-struct nodoALumno *listaALumnoConMasCreditos(struct Universidad *pucv)
-{
-
-}
-
-int contarCantidadAlumnosCurso(int sigla,struct Universidad *uni)
-{
-    struct nodoAlumno *rec;
-    int i,cont=0;
-    rec=uni->headAlum;
-
-    while(rec!=NULL)
-    {
-        for(i=0;i<MAX;i++)
-        {
-            if(rec->alumnos->cursos[i]!=NULL && rec->alumnos->cursos[i]->sigla==sigla)
-            {
-                cont++;
-                break;
-            }
-        }
-        rec=rec->sig;
-    }
-    return cant;
-}
-
-struct Curso **cursosMasAlumnos(struct Universidad *pucv,int cant)
-{
-	struct Curso *cursos=(struct Curso *)malloc(cant*sizeof(struct Curso *));
-	int alumnos,i;
-	struct Curso *head=pucv->cursos;
-	struct Curso *rec=head;
-
-	do{
-
-		alumnos=contarAlumnosCurso(rec);
-
-		for(i=0;i<cant;i++)
-		{
-			if(curos[i]==NULL)
-			{
-				cursos[i]=rec;
-			}
-			else if(alumnos > contarAlumnosCurso(cursos[i]))
-			{
-				cursos[i]=rec;
-			}
-
-
-		}
-		rec=rec->sig;
-
-	}while(rec!=head);
-
-	cursos=OrdenarAsendente(cursos,cant);
-
-	return cursos;
-
-}
-
-struct Cursos **ordenarAcentende(struct Curso **cursos,int cant)
-{
-	struct Curso *aux=cursos[1];
-	struct Curso *aux2;
-	int i,numero;
-	int k=0;
-
-	while(k<cant)
-	{
-		for(i=k;i<cant;i++)
-		{
-			if((contarAlumnosCurso(cursos[i+1])) >= (contarAlumnosCurso(cursos[i])))
-			{
-				aux=cursos[i+1];
-			}
-			else
-			{
-				aux=cursos[i];
-			}
-
-		}
-		cursos[k]=aux;
-		k++;
-	}
-
-	return cursos;
-
-}
-float promedioCreditosCursados(struct Universidad *pucv)
-
-	int credito=contarCantidadCreditosTotales(pucv);
-	int alumnos=contarCantidadAlumnos(pucv);
-	float promedio;
-	
-	promedio=creditos/alumnos;
-	
-	return promedio;
-
-	
-}
-
-
-struct Curso ** cursoBajoPromedioEvaluaciones(struct Universidad *pucv);
-//retorna el arrelgo de punteros a los cursos que su promedio de evaluaciones es menor al promedio de todos los cursos
-
-void ordenarCursosAscendente(struct Cursos **head);//este hago yo
-//ordena los cursos en la lista de forma ascendente segun el promedio obtenido en sus evaluaciones
-
-int *siglasCursosFusionados(struct Universidad *pucv ,char* tipo);//este haces tu
-//elimina todos los cursos (dado tipo) que su cantidad de alumnos es menos al 60% del promedio de alumnos de curso de se tipo.
-//debe redistribuir los alumnos de los cursos a eliminar,considere los creditos
-
-struct nodoALumno *listaALumnoConMasCreditos(struct Universidad *pucv)
-//genera una lista s.e. con aquellos alumnos que la suma de creditos, es un 40% menr al promedio de creditos de todos los alumnos de la U.
-
-void BalancearCursos(struct Universidad *pucv)
-//asegura q todos los cursos de una mismo tipo y credito no tenga mas de 1 alumno de diferencia
-
-
+1.	#include <stdio.h>
+2.	#include <stdlib.h>
+3.	#include <string.h>
+4.	 
+5.	struct Evaluacion
+6.	{
+7.	        char *fecha;
+8.	        float promedio;
+9.	};
+10.	struct nodoEvaluacion
+11.	{
+12.	        struct Evaluacion;
+13.	        struct nodoEvalucacion *sig;
+14.	};
+15.	struct Curso
+16.	{
+17.	        int sigla;
+18.	        char *tipo;
+19.	        char *nombre;
+20.	        int creditos;
+21.	        struct nodoEvaluacion *head;
+22.	        struct Curso *sig;
+23.	};
+24.	struct Alumno
+25.	{
+26.	        char *rut;
+27.	        char *nombre;
+28.	        struct Curso **cursos;
+29.	};
+30.	struct nodoAlumno
+31.	{
+32.	        struct Alumno *alumnos;
+33.	        struct nodoAlumno *sig;
+34.	};
+35.	struct Universidad
+36.	{
+37.	        char *rut;
+38.	        struct Curso *cursos;
+39.	        struct nodoAlumno *headAlum;
+40.	};
+41.	 
+42.	#define MAX 10
+43.	 
+44.	int main()
+45.	{
+46.	        return 0;
+47.	}
+48.	 
+49.	 
+50.	int contarCreditosAlumno(struct Universidad *u)
+51.	{
+52.	    int cont=0;
+53.	    struct nodoAlumno *rec;
+54.	    rec=u->headAlum;
+55.	 
+56.	    if(rec->alumnos!=NULL)
+57.	    {
+58.	        for(i=0;i<MAX;i++)
+59.	        {
+60.	            if(rec->alumnos->cursos[i]=!NULL)
+61.	            {
+62.	                cont=rec->alumnos->cursos[i]->creditos + cont;
+63.	            }
+64.	        }
+65.	    }
+66.	 
+67.	    return cont;
+68.	}
+69.	 
+70.	int contarCantidadCreditosTotal(struct Universidad *u)
+71.	{
+72.	    struct nodoAlumno *rec;
+73.	    int suma;
+74.	    rec=u->headAlum;
+75.	 
+76.	    while(rec=!NULL)
+77.	    {
+78.	        suma=suma+contarCreditosAlumno(u);
+79.	        rec=rec->sig;
+80.	    }
+81.	 
+82.	    return suma;
+83.	}
+84.	 
+85.	 
+86.	struct Curso *buscarcurso(int sigla, struct Curso *head){
+87.	 
+88.	        struct Curso *rec=head;
+89.	        do{
+90.	                if(rec->sigla==sigla);
+91.	                {
+92.	                        return rec;
+93.	                }
+94.	                rec=rec->sig;
+95.	        }while(rec!=head);
+96.	        return NULL;
+97.	}
+98.	 
+99.	int contarCantidadAlumnos(struct Universidad *u)
+100.	{
+101.	    struct nodoAlumno *rec;
+102.	    int cont=0;
+103.	    rec=u->headAlum;
+104.	 
+105.	    while(rec=!NULL)
+106.	    {
+107.	        rec=rec->sig;
+108.	        cont++;
+109.	    }
+110.	 
+111.	    return cont;
+112.	}
+113.	 
+114.	 
+115.	 
+116.	struct nodoALumno *listaALumnoConMasCreditos(struct Universidad *pucv)
+117.	{
+118.	 
+119.	}
+120.	 
+121.	int contarCantidadAlumnosCurso(int sigla,struct Universidad *uni)
+122.	{
+123.	    struct nodoAlumno *rec;
+124.	    int i,cont=0;
+125.	    rec=uni->headAlum;
+126.	 
+127.	    while(rec!=NULL)
+128.	    {
+129.	        for(i=0;i<MAX;i++)
+130.	        {
+131.	            if(rec->alumnos->cursos[i]!=NULL && rec->alumnos->cursos[i]->sigla==sigla)
+132.	            {
+133.	                cont++;
+134.	                break;
+135.	            }
+136.	        }
+137.	        rec=rec->sig;
+138.	    }
+139.	    return cant;
+140.	}
+141.	 
+142.	struct Curso **cursosMasAlumnos(struct Universidad *pucv,int cant)
+143.	{
+144.	        struct Curso *cursos=(struct Curso *)malloc(cant*sizeof(struct Curso *));
+145.	        int alumnos,i;
+146.	        struct Curso *head=pucv->cursos;
+147.	        struct Curso *rec=head;
+148.	 
+149.	        do{
+150.	 
+151.	                alumnos=contarAlumnosCurso(rec);
+152.	 
+153.	                for(i=0;i<cant;i++)
+154.	                {
+155.	                        if(curos[i]==NULL)
+156.	                        {
+157.	                                cursos[i]=rec;
+158.	                        }
+159.	                        else if(alumnos > contarAlumnosCurso(cursos[i]))
+160.	                        {
+161.	                                cursos[i]=rec;
+162.	                        }
+163.	 
+164.	 
+165.	                }
+166.	                rec=rec->sig;
+167.	 
+168.	        }while(rec!=head);
+169.	 
+170.	        cursos=OrdenarAsendente(cursos,cant);
+171.	 
+172.	        return cursos;
+173.	 
+174.	}
+175.	 
+176.	struct Cursos **ordenarAcentende(struct Curso **cursos,int cant)
+177.	{
+178.	        struct Curso *aux=cursos[1];
+179.	        struct Curso *aux2;
+180.	        int i,numero;
+181.	        int k=0;
+182.	 
+183.	        while(k<cant)
+184.	        {
+185.	                for(i=k;i<cant;i++)
+186.	                {
+187.	                        if((contarAlumnosCurso(cursos[i+1])) >= (contarAlumnosCurso(cursos[i])))
+188.	                        {
+189.	                                aux=cursos[i+1];
+190.	                        }
+191.	                        else
+192.	                        {
+193.	                                aux=cursos[i];
+194.	                        }
+195.	 
+196.	                }
+197.	                cursos[k]=aux;
+198.	                k++;
+199.	        }
+200.	 
+201.	        return cursos;
+202.	 
+203.	}
+204.	 
+205.	 
+206.	float promedioCreditosCursados(struct Universidad *pucv)
+207.	 
+208.	        int credito=contarCantidadCreditosTotales(pucv);
+209.	        int alumnos=contarCantidadAlumnos(pucv);
+210.	        float promedio;
+211.	 
+212.	        promedio=creditos/alumnos;
+213.	 
+214.	        return promedio;
+215.	}
