@@ -1,0 +1,150 @@
+#include <stdio.h>
+#include <stdlib.h>
+#define CANT 28
+ 
+struct Candidato
+{
+        char *rut;
+        char *nombre;
+        char *partidoPolitico;
+        int cantidadVotos;
+};
+ 
+struct NodoCandidato
+{
+        struct Candidato *candidato;
+        struct NodoCandidato *sig;
+};
+ 
+struct Distrito
+{
+        int numeroDistrito;
+        int cantidadDiputados;
+        struct NodoCandidato *head;
+};
+ 
+struct Distrito **distritos;
+ 
+main()
+{
+        int opcion=0;
+        char *rut[10];
+        int numDistrito;
+        distritos=(struct Distrito**)malloc(CANT*sizeof(struct Distrito*));
+ 
+        do
+        {
+                printf("Menu Principal:\n");
+                printf("1). Eliminar Cantidato\n");
+                printf("2). Cambiar candidato de distrito\n");
+                printf(".....");
+                scanf("%d, &opcion");
+ 
+                switch(opcion)
+                {
+                case 1:
+                        printf("Ingrese el rut del candidato a eliminar");
+                        scanf("%s",&rut);
+                        if(eliminarCandidato(distritos,rut)!=NULL)
+                        {
+                                printf("Candidato Eliminado correctamente");
+                        }else{
+                                printf("El candidato no se pudo eliminar");
+                        }
+                        break;
+                case 2:
+                        printf("Ingrese el rut del candidato que desea cambiar");
+                        scanf("%s",&rut);
+                        printf("Ingrese el numero del distrito al que desea asignar");
+                        scanf("%d",&numDistrito);
+                        if(cambiarCandidatoDistrito(distritos,rut,numDistrito)==1)
+                        {
+                                printf("El candidato fue reasignado correctamente");
+                        }else{
+                                printf("El candidato no pudo ser reasignado");
+                        }      
+                        break;
+                default:
+                        break;
+                }
+ 
+        }while(opcion!=0);
+ 
+}
+ 
+struct Candidato *buscarCandidatoEnUnDistrito(struct NodoCandidato *head, char *rut)
+{
+        struct NodoCandidato *rec=head;
+       
+        if(head!=NULL)
+        {
+                do
+                {
+                        if(strcmp(rec->persona->rut,rut)==0)
+                        {
+                                return rec->persona;
+                        }
+                        rec=rec->sig;
+                }while(rec!=head);
+        }
+        return NULL;
+}
+ 
+ 
+struct Candidato *buscarCandidatoEnDistritos(struct Distrito **distritos,char *rut)
+{
+        int i;
+       
+        for(i=0; i<CANT; i++)
+        {
+                if(buscarCandidatoEnUnDistrito(distritos[i]->candidato, rut)!=NULL)
+                {
+                        return buscarCandidatoEnUnDistrito(distritos[i]->candidato, rut);
+                }
+        }
+        return NULL;
+}
+ 
+struct Candidato *eliminarCandidato(struct Distrito **distritos,char *rut)
+{
+        struct Candidato *aux;
+        aux=buscarCandidatoEnDistritos(distritos,rut);
+        if(aux!=NULL)
+        {
+                free(buscarCandidatoEnDistritos(distritos,rut));
+                return aux;
+        }
+        return NULL;
+}
+ 
+int buscarDistrito(struct Distrito **distritos,int numDistrito)
+{
+        int i;
+ 
+        for(i=0;i<CANT;i++)
+        {
+                if(distritos[i]->numeroDistrito==numDistrito)
+                {
+                        return i;
+                }
+        }
+ 
+        return 0;
+}
+ 
+int cambiarCandidatoDistrito(struct Distrito **distritos,int numDistrito,char *rut)
+{
+        struct Candidadato *aux;
+        int numDistritoNuevo;
+ 
+        aux=buscarCandidatoEnDistritos(distritos,rut);
+        numDistritoNuevo=buscarDistrito(distritos,numDistrito);
+ 
+        if(aux!=NULL)
+        {
+                eliminarCandidato(distritos,rut);
+                agregarCandidato(distritos[numDistritoNuevo]->head,aux)
+                return 1;
+        }
+        return 0;
+}
